@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>{{title}}</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+      body {
+        font-family: system-ui, "Segoe UI", Roboto, Arial;
+        margin: 20px;
+      }
+      img {
+        max-width: 90vw;
+        height: auto;
+        border: 1px solid #ddd;
+      }
+      .form-row { margin-top: 8px; }
+    </style>
+  </head>
+  <body>
+    <h1>Tutor Tutor</h1>
+    <form method="get">
+      <label for="name">Card name: </label>
+      <input id="name" name="name" value="{{value}}" placeholder="Black Lotus" style="width:300px" />
+      <button type="submit">Show</button>
+    </form>
+    <div style="margin-top:16px">
+      <img src="{{imgSrc}}" alt="{{title}}" />
+    </div>
+  </body>
+</html>

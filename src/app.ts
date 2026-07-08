@@ -1,4 +1,7 @@
 import express from 'express';
+import fs from 'fs';
+
+const cardTemplate = fs.readFileSync(new URL('./templates/card.html', import.meta.url), 'utf8');
 
 export function createApp() {
   const app = express();
@@ -9,18 +12,39 @@ export function createApp() {
 
   app.get('/api/scryfall', async (_req, res) => {
     try {
-      const response = await fetch('https://api.scryfall.com', {
+      const response = await fetch('https://api.scryfall.com/cards/named?exact=Black%20Lotus', {
         headers: {
           'User-Agent': 'TutorTutorBackend/1.0 (+https://example.com)',
           Accept: 'application/json'
         }
       });
       const data = await response.json();
+
+      if (!response.ok) {
+        return res.status(response.status).json(data);
+      }
+
       res.json(data);
     } catch (error) {
       console.error('Failed to fetch Scryfall API', error);
       res.status(502).json({ error: 'Failed to fetch Scryfall API' });
     }
+  });
+
+
+  app.get('/card', (req, res) => {
+    const cardName = req.query.name ? String(req.query.name) : 'Black Lotus';
+    const esc = (s: string) =>
+      s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+    const safe = esc(cardName);
+    const imgSrc = `/card-image?name=${encodeURIComponent(cardName)}`;
+
+    const html = cardTemplate
+      .replaceAll('{{title}}', safe)
+      .replaceAll('{{value}}', safe)
+      .replaceAll('{{imgSrc}}', imgSrc);
+
+    res.type('html').send(html);
   });
 
   return app;
