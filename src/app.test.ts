@@ -14,7 +14,7 @@ test('GET /api/scryfall returns JSON', async () => {
     assert.ok(address && typeof address === 'object');
 
     const { port } = address as AddressInfo;
-    const response = await fetch(`http://127.0.0.1:${port}/api/scryfall`);
+    const response = await fetch(`http://127.0.0.1:${port}/api/scryfall?name=Black%20Lotus`);
 
     assert.ok(response.status === 200 || response.status === 404);
     const data = await response.json();
